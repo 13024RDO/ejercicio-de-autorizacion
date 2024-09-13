@@ -1,20 +1,16 @@
 import { Router } from "express";
 import {
-  signInCtrl,
-  signOutCtrl,
-  validateSessionCtrl,
+  signIn,
+  signOut,
+  validateSession,
 } from "../controllers/auth.controllers.js";
-import validarJwt from "../middlewares/validar-jwt.js";
+import { authenticate } from "../middlewares/validar-jwt.js";
 
-const authRouter = Router();
+const router = Router();
 
-// Endpoint de inicio de sesión (login)
-authRouter.post("/sign-in", signInCtrl);
+router.post("/sign-in", signIn);
+router.post("/sign-out", signOut);
+router.get("/session", authenticate, validateSession);
 
-// Endpoint de cierre de sesión (logout)
-authRouter.post("/sign-out", signOutCtrl);
-
-// Endpoint para validar la sesión
-authRouter.get("/session", validarJwt, validateSessionCtrl);
-
-export { authRouter };
+const authRouter = router;
+export default authRouter;

@@ -1,2 +1,13 @@
-export const PORT = process.env.PORT || 4000;
-export const SECRET_KEY = process.env.SECRET_KEY || "seed-of-backend-jwt";
+export const environment = {
+  server: { host: "http://localhost", port: 3000 },
+  db: {
+    host: "localhost",
+    port: 3306,
+    database: "todos",
+    user: "root",
+    password: "",
+  },
+  auth: {
+    secret: "secret",
+  },
+};

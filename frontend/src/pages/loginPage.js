@@ -1,6 +1,5 @@
 export const loginPage = () => {
   const container = document.createElement("div");
-
   container.classList.add(
     "flex",
     "items-center",
@@ -10,7 +9,6 @@ export const loginPage = () => {
   );
 
   const form = document.createElement("form");
-
   form.classList.add(
     "flex",
     "flex-col",
@@ -23,12 +21,10 @@ export const loginPage = () => {
   );
 
   const title = document.createElement("h2");
-
   title.classList.add("text-2xl", "font-bold", "mb-4");
   title.textContent = "Login form";
 
   const usernameInput = document.createElement("input");
-
   usernameInput.type = "text";
   usernameInput.id = "username";
   usernameInput.name = "username";
@@ -43,7 +39,6 @@ export const loginPage = () => {
   usernameInput.placeholder = "Username";
 
   const passwordInput = document.createElement("input");
-
   passwordInput.type = "password";
   passwordInput.id = "password";
   passwordInput.required = true;
@@ -58,7 +53,6 @@ export const loginPage = () => {
   passwordInput.placeholder = "Password";
 
   const submitButton = document.createElement("button");
-
   submitButton.type = "submit";
   submitButton.classList.add(
     "w-full",
@@ -72,10 +66,15 @@ export const loginPage = () => {
   );
   submitButton.textContent = "Login";
 
+  const messageDiv = document.createElement("div");
+  messageDiv.id = "message";
+  messageDiv.classList.add("text-center", "mt-4");
+
   form.appendChild(title);
   form.appendChild(usernameInput);
   form.appendChild(passwordInput);
   form.appendChild(submitButton);
+  form.appendChild(messageDiv);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -83,17 +82,16 @@ export const loginPage = () => {
     const username = usernameInput.value;
     const password = passwordInput.value;
 
-    // Validación básica
     if (!username || !password) {
-      document.getElementById("message").innerText =
-        "Por favor, completa todos los campos.";
+      messageDiv.innerText = "Por favor, completa todos los campos.";
+      messageDiv.classList.add("bg-red-500", "text-white", "p-2", "rounded");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:4000/auth/sign-in", {
+      const response = await fetch("http://localhost:3000/auth/sign-in", {
         method: "POST",
-        credentials: "include", // Importante para enviar las cookies de sesión
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -101,18 +99,17 @@ export const loginPage = () => {
       });
 
       if (!response.ok) {
-        divError.innerText = "Credenciales inválidas";
-        divError.classList.add(
-          "bg-danger",
-          "text-white",
-          "text-center",
-          "rounded",
-          "p-2",
-          "mt-3"
-        );
+        messageDiv.innerText = "Credenciales inválidas";
+        messageDiv.classList.add("bg-red-500", "text-white", "p-2", "rounded");
 
         setTimeout(() => {
-          divError.hidden = true;
+          messageDiv.innerText = "";
+          messageDiv.classList.remove(
+            "bg-red-500",
+            "text-white",
+            "p-2",
+            "rounded"
+          );
         }, 3500);
 
         return;
@@ -121,7 +118,10 @@ export const loginPage = () => {
       const data = await response.json();
       console.log(data);
       window.location.pathname = "/home";
-    } catch (error) {}
+    } catch (error) {
+      messageDiv.innerText = "Error al iniciar sesión. Inténtalo de nuevo.";
+      messageDiv.classList.add("bg-red-500", "text-white", "p-2", "rounded");
+    }
   });
 
   container.appendChild(form);

@@ -1,27 +1,27 @@
-// server.js
-import express from "express";
 import cookieParser from "cookie-parser";
-import session from "express-session";
 import cors from "cors";
+import express from "express";
+import session from "express-session";
 import morgan from "morgan";
-
-import { PORT } from "./config/env.js";
-
-import { authRouter } from "./routes/auth.routes.js";
-import { todosRouter } from "./routes/todos.routes.js";
+import { environment } from "./config/env.js";
+import authRouter from "./routes/auth.routes.js";
+import todoRouter from "./routes/todos.routes.js";
 
 const app = express();
+const PORT = environment.server.port;
+const HOST = environment.server.host;
 
 app.use(
   cors({
     origin: [
-      "http://localhost:5500",
       "http://localhost:3000",
-      "http://127.0.0.1:3000",
+      "http://localhost:3001",
+      "http://localhost:3002",
+      "http://localhost:3003",
       "http://localhost:5173",
+      "http://localhost:5174",
     ],
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
 app.use(morgan("dev"));
@@ -29,18 +29,16 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   session({
-    secret: "session_secret_key", // Cambia esto por una clave secreta en producción
+    secret: "secret",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }, // Usar 'true' si usas HTTPS
+    cookie: { secure: false },
   })
 );
 
-// routes
 app.use("/auth", authRouter);
-app.use("/todos", todosRouter);
+app.use("/todos", todoRouter);
 
-// Servidor escuchando
 app.listen(PORT, () => {
-  console.log(`Server running in http://localhost:${PORT}`);
+  console.log(`Server running in ${HOST}:${PORT}`);
 });
