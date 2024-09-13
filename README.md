@@ -1,5 +1,7 @@
 # Proyecto Base
 
+Ingresar desde la terminal del proyecto en visual
+
 Instalaciones:
 
 Backend:
@@ -16,5 +18,18 @@ cd frontend
 npm install
 ```
 
-Ejecución en Desarrollo:
-Ingresar en cada directorio desde una terminal diferente y ejecutar el comando `npm run dev`
+Ejecutar el Backend:
+
+```bash
+cd backend
+npm run dev
+```
+
+Ejecutar el Frontend:
+
+```bash
+cd frontend
+npm run dev
+```
+
+Ingresar a la direccion proporcionada por el frontend
